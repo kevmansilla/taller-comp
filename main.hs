@@ -1,6 +1,17 @@
 module Main where
 
 import Lab
+import Data.Map (Map, fromList, (!?))
+import qualified Data.Map as Map
+import Control.Monad (when)
+
+
+-- Función de verificación
+check :: (Eq a, Show a) => String -> a -> a -> IO ()
+check name expected actual =
+  if expected == actual
+    then putStrLn (name ++ " PASSED")
+    else putStrLn (name ++ " FAILED: expected " ++ show expected ++ ", but got " ++ show actual)
 
 {- test 1-}
 prog1 = Assign "x" (Const 8)
@@ -60,6 +71,16 @@ progDivMod =
 ejemploDivMod a b = eval ["x", "y"] progDivMod $ 
   update (update eInicial "x" a) "y" b
 
+{- test 5 -}
+testLocal =
+  Local "x" (Const 10) (
+    Seq
+      (Assign "x" (Plus (Var "x") (Const 1))) -- x := x + 1
+      (Assign "y" (Var "x")) -- y := x
+  )
+
+ejemplo5 = eval ["x", "y"] testLocal eIniTest
+-- veo el valor de x en local y en global
 
 {- Main test -}
 main :: IO ()
@@ -74,3 +95,5 @@ main = do
   ejemploDivMod 10 2
   putStrLn "\nEjemplo DivMod: Dividir x = -10 y = 2 -> aborta (deja valores iniciales)"
   ejemploDivMod (-10) 2
+  putStrLn "\nEjemplo Local: x = 5, y = 6"
+  ejemplo5
