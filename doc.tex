@@ -1,0 +1,85 @@
+\documentclass[12pt,a4paper]{article}
+\input{packages.tex}
+\begin{document}
+\maketitle{}
+
+Implementación de la semántica denotacional para el lenguaje imperativo simple 
+con fallas (LIS + Fallas).
+
+\section{Semántica del lenguaje}
+Se agregan excepciones al lenguaje imperativo simple.
+$$\langle comm \rangle ::= fail \mid catchin \langle comm \rangle with \langle comm \rangle$$
+
+Sea $\Sigma^{'} = \Sigma \cup \{ abort\}$ con orden discreto. La guncion semántica ahora es:
+\begin{align*}
+\llbracket\_\,\rrbracket \in \langle comm \rangle \to \Sigma \to \Sigma^{'}_{\bot}
+\end{align*}
+
+Las ecuaciones semánticas son las siguiente:
+\begin{align*}
+\llbracket Skip \rrbracket_{\sigma} & = \sigma \\
+\llbracket Fail\rrbracket_{\sigma} &= \langle abort, \sigma \rangle\\
+\llbracket v := e\rrbracket_{\sigma} &= [\sigma\mid v : \llbracket e\rrbracket_{\sigma} ]\\
+\llbracket if\,\, b\,\, then\,\, c_{0}\,\, else\,\, c_{1} \rrbracket_{\sigma} &= \begin{cases}
+  \llbracket c_{0}\rrbracket_{\sigma} & \text{si}\,\, \llbracket b\rrbracket_{\sigma}\\
+  \llbracket c_{1}\rrbracket_{\sigma} & \text{si}\,\, \neg \llbracket b\rrbracket_{\sigma}
+\end{cases}\\
+\end{align*}
+
+
+Operadores de transferencia de control. Dada $f \in \Sigma \to \Sigma^{'}_{\bot}$,
+denotamos por $f_{*}$ la siguiente funcion
+\begin{align*}
+f_{*} & \in \Sigma^{'}_{\bot} \to \Sigma^{'}_{\bot}\\
+f_{*}x &= \begin{cases}
+  f \sigma & \text{si}\,\, x = \sigma \in \Sigma\\
+  x & \text{si no}
+\end{cases}
+\end{align*}
+
+En este caso, la presencia de una situación obortiva determina que no se 
+transfiere el control a $f$ Servira para describir el significado de $c_{0};c_{1}$
+ya que si ocurre una situacion de excepción al ejecutar $c_{0}$, en control no es 
+transferido a $c_{1}$.
+
+Por otro lado, dado $f\in \Sigma \to \Sigma^{'}_{\bot}$, denotamos $f_{+}$ a la sigueinte extension de $f$ a $\Sigma^{'}_{\bot}$:
+\begin{align*}
+f_{+} & \in \Sigma^{'}_{\bot} \to \Sigma^{'}_{\bot}\\
+f_{*}x &= \begin{cases}
+  f \sigma & \text{si}\,\, x = \langle abort, \sigma \rangle \in \{ abort\}\times \Sigma\\
+  x & \text{si no}
+\end{cases}
+\end{align*}
+
+En una clara dualidad con la definición de $f_{*}$, la definición de $f_{+}$ 
+determina lo contrario: se transfiere el control a $f$ sólo en caso de excepción. 
+Esto corresponderá a $catchin\,\, c\,\, with\,\, c'$.
+
+Finalmente, dada $f\in \Sigma \to \Sigma$, denotamos por $f_{\dagger}$ la siguiente
+extension de $f$ a $\Sigma^{'}_{\bot}$:
+\begin{align*}
+f_{\dagger} & \in \Sigma^{'}_{\bot} \to \Sigma^{'}_{\bot}\\
+f_{\dagger}x &= \begin{cases}
+  \langle abort, f\sigma \rangle & \text{si}\,\, x = \langle abort, \sigma \rangle \\
+  f x & \text{si}\,\, x \in \Sigma\\
+  \bot & \text{si no}
+\end{cases}
+\end{align*}
+
+
+Nose que aui hay una transferencia de control a $f$ en cualquier situacion (abortiva o no). Servirá para restaurar el valor de las variables locales. Entonces las 
+demas funcione semanticas
+\begin{align*}
+\llbracket c_{0};c_{1} \rrbracket_{\sigma} &= \llbracket c_{1}\rrbracket_{*}(\llbracket c_{0}\rrbracket_{\sigma})\\
+\llbracket catchin \,\,c_{0}\,\, with \,\,c_{1} \rrbracket_{\sigma} &= \llbracket c_{1}\rrbracket_{+}(\llbracket c_{0}\rrbracket_{\sigma})\\
+\llbracket newvar\,\, v := e\,\, in\,\, c \rrbracket_{\sigma} &= (\lambda\sigma^{'} \in \Sigma. 
+[\sigma^{'} \mid v : \sigma v])_{\dagger} (\llbracket c\rrbracket[\sigma \mid v : \llbracket e\rrbracket_{\sigma} ])\\
+\llbracket while\,\,b\,\,do\,\,c\rrbracket &= \sqcup_{i=0}^{\infty} F^{i} \bot_{\Sigma \to \Sigma_{\bot}} \\
+donde \\
+F w \sigma &= \begin{cases}
+  w_{*}(\llbracket c\rrbracket_{\sigma}) & \text{si}\,\, \llbracket b\rrbracket_{\sigma}\\
+  \sigma & \text{si}\,\, \neg \llbracket b\rrbracket_{\sigma}
+  \end{cases}
+\end{align*}
+
+\end{document}
