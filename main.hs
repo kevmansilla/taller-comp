@@ -1,17 +1,7 @@
 module Main where
 
 import Lab
-import Data.Map (Map, fromList, (!?))
-import qualified Data.Map as Map
-import Control.Monad (when)
 
-
--- Función de verificación
-check :: (Eq a, Show a) => String -> a -> a -> IO ()
-check name expected actual =
-  if expected == actual
-    then putStrLn (name ++ " PASSED")
-    else putStrLn (name ++ " FAILED: expected " ++ show expected ++ ", but got " ++ show actual)
 
 {- test 1-}
 prog1 = Assign "x" (Const 8)
