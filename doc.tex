@@ -10,7 +10,7 @@ con fallas (LIS + Fallas).
 Se agregan excepciones al lenguaje imperativo simple.
 $$\langle comm \rangle ::= fail \mid catchin \langle comm \rangle with \langle comm \rangle$$
 
-Sea $\Sigma^{'} = \Sigma \cup \{ abort\}$ con orden discreto. La guncion semántica ahora es:
+Sea $\Sigma^{'} = \Sigma \cup \{ abort\} \times \Sigma$ con orden discreto. La guncion semántica ahora es:
 \begin{align*}
 \llbracket\_\,\rrbracket \in \langle comm \rangle \to \Sigma \to \Sigma^{'}_{\bot}
 \end{align*}
@@ -45,7 +45,7 @@ transferido a $c_{1}$.
 Por otro lado, dado $f\in \Sigma \to \Sigma^{'}_{\bot}$, denotamos $f_{+}$ a la sigueinte extension de $f$ a $\Sigma^{'}_{\bot}$:
 \begin{align*}
 f_{+} & \in \Sigma^{'}_{\bot} \to \Sigma^{'}_{\bot}\\
-f_{*}x &= \begin{cases}
+f_{+}x &= \begin{cases}
   f \sigma & \text{si}\,\, x = \langle abort, \sigma \rangle \in \{ abort\}\times \Sigma\\
   x & \text{si no}
 \end{cases}
