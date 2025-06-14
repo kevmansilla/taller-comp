@@ -77,13 +77,13 @@ main :: IO ()
 main = do
   putStrLn "Ejemplo 1: Asignar x = 8"
   ejemplo1
-  putStrLn "\nEjemplo 2: Asignar x = 4, y = 5"
+  putStrLn "\nEjemplo 2: Asignar x = 3, y = 5, luego guarda en x el resultado de (3+5)/2 = 4"
   ejemplo2
-  putStrLn "\nEjemplo 3: se comporta como skip"
+  putStrLn "\nEjemplo 3: al inicio x=7 localmente, pero al salir del scope se restaura el valor anterior de x en el estado inicial que es 0"
   ejemplo3
   putStrLn "\nEjemplo DivMod: Dividir x = 10, y = 2 -> x = 5, y = 0"
   ejemploDivMod 10 2
   putStrLn "\nEjemplo DivMod: Dividir x = -10 y = 2 -> aborta (deja valores iniciales)"
   ejemploDivMod (-10) 2
-  putStrLn "\nEjemplo Local: x = 5, y = 6"
+  putStrLn "\nEjemplo: Local: x = 10, luego x = x + 1, y = x -> x = 0, y = 11"
   ejemplo5
