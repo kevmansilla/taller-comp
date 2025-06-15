@@ -1,6 +1,6 @@
-module Lab where
+{-# LANGUAGE GADTs #-}
 
-{-  LANGUAGE GADTs -}
+module Lab where
 
 --         ∞
 -- fix f = ⊔ fⁱ ⊥
